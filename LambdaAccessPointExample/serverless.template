@@ -3,6 +3,48 @@
   "Transform": "AWS::Serverless-2016-10-31",
   "Description": "An AWS Serverless Application. This template is partially managed by Amazon.Lambda.Annotations (v0.13.2.0).",
   "Resources": {
+    "DataFiles": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {}
+    },
+    "DataFilesAccessPoint": {
+      "Type": "AWS::S3::AccessPoint",
+      "Properties": {
+        "Bucket": {
+          "Ref": "DataFiles"
+        }
+      }
+    },
+    "LambdaAccessPoint": {
+      "Type": "AWS::S3ObjectLambda::AccessPoint",
+      "Properties": {
+        "ObjectLambdaConfiguration": {
+          "SupportingAccessPoint": {
+            "Fn::GetAtt": [
+              "DataFilesAccessPoint",
+              "Arn"
+            ]
+          },
+          "TransformationConfigurations": [
+            {
+              "Actions": [
+                "GetObject"
+              ],
+              "ContentTransformation": {
+                "AwsLambda": {
+                  "FunctionArn": {
+                    "Fn::GetAtt": [
+                      "LambdaTranslate",
+                      "Arn"
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
     "LambdaAccessPointExampleApiGetTranslatedTextGenerated": {
       "Type": "AWS::Serverless::Function",
       "Metadata": {
@@ -17,22 +59,35 @@
         "MemorySize": 256,
         "Timeout": 30,
         "Policies": [
-          "AWSLambdaBasicExecutionRole"
+          "AWSLambdaBasicExecutionRole",
+          "AmazonS3ReadOnlyAccess",
+          "AWSLambdaRole"
         ],
         "PackageType": "Zip",
         "Handler": "LambdaAccessPointExample::LambdaAccessPointExample.Api_GetTranslatedText_Generated::GetTranslatedText",
+        "Environment": {
+          "Variables": {
+            "LAMBDA_NET_SERIALIZER_DEBUG": "true",
+            "DATA_FILES_BUCKET": {
+              "Fn::GetAtt": [
+                "LambdaAccessPoint",
+                "Arn"
+              ]
+            }
+          }
+        },
         "Events": {
           "RootGet": {
             "Type": "HttpApi",
             "Properties": {
-              "Path": "/{fileName}",
+              "Path": "/{filename}",
               "Method": "GET"
             }
           }
         }
       }
     },
-    "LambdaAccessPointExampleS3LambdaAccessPointTranslateS3ObjectGenerated": {
+    "LambdaTranslate": {
       "Type": "AWS::Serverless::Function",
       "Metadata": {
         "Tool": "Amazon.Lambda.Annotations"
@@ -43,10 +98,17 @@
         "MemorySize": 256,
         "Timeout": 30,
         "Policies": [
-          "AWSLambdaBasicExecutionRole"
+          "AWSLambdaBasicExecutionRole",
+          "TranslateReadOnly",
+          "AmazonS3ObjectLambdaExecutionRolePolicy"
         ],
         "PackageType": "Zip",
-        "Handler": "LambdaAccessPointExample::LambdaAccessPointExample.S3LambdaAccessPoint_TranslateS3Object_Generated::TranslateS3Object"
+        "Handler": "LambdaAccessPointExample::LambdaAccessPointExample.S3LambdaAccessPoint_TranslateS3Object_Generated::TranslateS3Object",
+        "Environment": {
+          "Variables": {
+            "LAMBDA_NET_SERIALIZER_DEBUG": "true"
+          }
+        }
       }
     }
   },

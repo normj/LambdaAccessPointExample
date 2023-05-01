@@ -1,0 +1,41 @@
+{
+    "version": "2.0",
+    "routeKey": "GET /{filename}",
+    "rawPath": "/greetings.txt",
+    "rawQueryString": "",
+    "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate, br",
+        "content-language": "es-ES",
+        "content-length": "0",
+        "host": "y51u46odd9.execute-api.us-west-2.amazonaws.com",
+        "postman-token": "166320cd-2f13-4792-8b17-374c8116515c",
+        "user-agent": "PostmanRuntime/7.32.2",
+        "x-amzn-trace-id": "Root=1-644f4ed5-6ceb92fe517b5c731b24b5d6",
+        "x-forwarded-for": "50.46.229.251",
+        "x-forwarded-port": "443",
+        "x-forwarded-proto": "https"
+    },
+    "requestContext": {
+        "accountId": "626492997873",
+        "apiId": "y51u46odd9",
+        "domainName": "y51u46odd9.execute-api.us-west-2.amazonaws.com",
+        "domainPrefix": "y51u46odd9",
+        "http": {
+            "method": "GET",
+            "path": "/greetings.txt",
+            "protocol": "HTTP/1.1",
+            "sourceIp": "50.46.229.251",
+            "userAgent": "PostmanRuntime/7.32.2"
+        },
+        "requestId": "EOlBbiMevHcEPFg=",
+        "routeKey": "GET /{filename}",
+        "stage": "$default",
+        "time": "01/May/2023:05:32:05 +0000",
+        "timeEpoch": 1682919125647
+    },
+    "pathParameters": {
+        "filename": "greetings.txt"
+    },
+    "isBase64Encoded": false
+}
