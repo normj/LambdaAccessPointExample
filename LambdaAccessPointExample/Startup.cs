@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Amazon.S3;
 
 namespace LambdaAccessPointExample
 {
@@ -8,7 +7,8 @@ namespace LambdaAccessPointExample
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAWSService<IAmazonS3>();
+            services.AddAWSService<Amazon.Translate.IAmazonTranslate>();
+            services.AddAWSService<Amazon.S3.IAmazonS3>();
         }
     }
 }
